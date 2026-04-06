@@ -1,0 +1,61 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head id="Head1" runat="server">
+  <title>Material Receive</title>
+  <link href="http://remoteapi.rcinz.com/static/css/main.css" type="text/css" rel="STYLESHEET" />
+  <link href="http://remoteapi.rcinz.com/static/css/tab.css" type="text/css" rel="STYLESHEET" />
+  </head>
+
+  <body style="background-color:White;">
+
+<table cellpadding="0" cellspacing="0" border="0" width="780">
+<tr class="prmRepMainHead">
+<td>WIRE SIZE WITH TL<br /><span style="font-size:7pt; font-weight:normal;">*All Sizes are in MM</span></td>
+</tr>
+
+</table> 
+<table cellpadding="1" cellspacing="0" border="1" width="780" style="border-collapse:collapse; border:solid 1px black;">
+    <!--Loop Begin-->
+    <tr class="RepHead">
+        <td valign="top">{{ws.matno}}</td>        
+        <td valign="top" colspan="7" style="font-size:14pt;" align="left">{{ws.chrDescription}}</td>
+        <td valign="top" colspan="2">Create/Modified: </td>
+        <td valign="top" colspan="2">{{ws.csDescription}}</td>
+    </tr>
+    <tr class="Arial10Bold">
+	<td valign="top">WIRE NO.</ td>
+        <td valign="top">LEFT <br />TERMINAL</ td>
+        <td  valign="top" align="right">L-S</td>
+        <td  valign="top" align="right">L-P</td>
+        <td  valign="top" align="right">R-S</td>
+        <td  valign="top" align="right">R-P</td>
+        <td valign="top">PARTNO</ td>
+        <td valign="top">COLOUR</ td>
+        <td valign="top" align="right">LENGTH</ td>        
+	<td  valign="top">LEFT<br />INSERT</ td>
+	<td  valign="top">RIGHT<br />INSERT</ td>
+	<td valign="top">RIGHT <br />TERMINAL</ td>    
+    </tr>
+
+    {% for item in details %}
+    <tr class="Arial10">
+	<td  valign="top">{%  if  item.wireNo %} {{item.wireNo}} {% endif %}</td>        
+        <td  valign="top">{%  if  item.leftTL %} {{item.leftTL}} {% endif %}</td>
+        <td  valign="top" align="right">{%  if  item.leftSL %} {{item.leftSL}} {% endif %}</td>
+        <td  valign="top" align="right">{%  if  item.leftPL %} {{item.leftPL}} {% endif %}</td>
+        <td  valign="top" align="right">{%  if  item.rightSL %} {{item.rightSL}} {% endif %}</td>
+        <td  valign="top" align="right">{%  if  item.rightPL %} {{item.rightPL}} {% endif %}</ td>
+        <td  valign="top">{%  if  item.partNo %} {{item.partNo}} {% endif %}</td>  
+        <td  valign="top">{%  if  item.colName %} {{item.colName}} {% endif %}</td>
+        <td  valign="top" align="right">{%  if  item.wlength %} {{item.wlength}} {% endif %}</td>
+	<td  valign="top">{%  if  item.leftCap %} {{item.leftCap}} {% endif %}</td>
+	<td  valign="top">{%  if  item.rightCap %} {{item.rightCap}} {% endif %}</td>
+        <td  valign="top">{%  if  item.rightTL %} {{item.rightTL}} {% endif %}</td>
+    </tr>
+{% endfor %}
+         
+<!--Loop End-->  
+               
+</table>
+
+</body> 
+</html>

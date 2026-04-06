@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head id="Head1" runat="server">
+  <title>Wire Size Stripping</title>
+  <link href="http://erpapi.rcinz.com/static/css/main.css" type="text/css" rel="STYLESHEET" />
+  <link href="http://erpapi.rcinz.com/static/css/tab.css" type="text/css" rel="STYLESHEET" />  
+  </head>
+  <body style="background-color:White;">
+<table cellpadding="0" cellspacing="0" border="0" width="1000">
+<tr class="prmRepMainHead">
+<td>STRIPPING<br /><span style="font-size:7pt; font-weight:normal;">*All Sizes are in MM</span></td>
+</tr>
+<tr class="prmRepMainHeadTD">
+<td align="right"><asp:Label ID="lblSearch" runat="server" /></td>
+</tr>
+</table> 
+<table cellpadding="0" cellspacing="0" border="1" width="1000" style="border-collapse:collapse; border:solid 1px black;">
+    <!-- Loop Begin -->
+    <tr class="RepHead">
+        <td colspan="5" valign="top">{{ws.0.matno}}</td>        
+        <td colspan="10" valign="top" style="font-size:14pt;" align="center">{% if ws.0.chrDescription %} {{ws.0.chrDescription}} {% endif %}</td>
+    </tr>
+    
+    <tr class="Arial10Bold">
+        <td  valign="top">SNO.</td>                      
+        <td  valign="top">COLOUR</ td>
+        <td  valign="top" align="right">LENGTH</td>
+        <td  valign="top" align="right">LEFT SL</td>
+        <td  valign="top" align="right">LEFT PL</td>
+        <td  valign="top">LEFT<br />TERMINAL</td>
+        <td  valign="top">LEFT<br />CAP</td>
+        <td  valign="top">LEFT<br />SLEEVE</td>
+        <td  valign="top" align="right">RIGHT SL</td>
+        <td  valign="top" align="right">RIGHT PL</td>
+        <td  valign="top">RIGHT<br />TERMINAL</td>
+        <td  valign="top">RIGHT<br />CAP</td>
+        <td  valign="top">RIGHT<br />SLEEVE</td>
+        <td  valign="top">Remark</td>
+        <td  valign="top">Type</td>
+    </tr>
+
+    {% for data in ws %}
+    <tr class="Arial12Bold">
+        <td colspan="15" valign="top">PART NO: {{data.partNo}}</td>        
+    </tr>
+    {% for wsd in data.wsdetails %}
+   <tr class="Arial12">            
+        <td  valign="top">{{forloop.counter}}</td>
+        <td NOWRAP  valign="top">{{wsd.colNo}} - {{wsd.colName}}</td>
+        <td NOWRAP  valign="top" align="right">{{wsd.wlength}}</td>
+        <td NOWRAP  valign="top" align="right"> {% if wsd.leftSL %} {{wsd.leftSL}} {% endif %} </td>
+        <td NOWRAP  valign="top" align="right"> {% if wsd.leftPL %} {{wsd.leftPL}} {% endif %} </td>
+        <td NOWRAP  valign="top"> {% if wsd.leftTL %} {{wsd.leftTL}} {% endif %} </td>
+        <td NOWRAP  valign="top"> {% if wsd.leftCap %} {{wsd.leftCap}} {% endif %} </td>
+        <td NOWRAP  valign="top"> {% if wsd.leftSleeve %} {{wsd.leftSleeve}} {% endif %} </td>
+        <td NOWRAP  valign="top" align="right"> {% if wsd.rightSL %} {{wsd.rightSL}} {% endif %} </td>
+        <td NOWRAP  valign="top" align="right"> {% if wsd.rightPL %} {{wsd.rightPL}} {% endif %} </td>
+        <td NOWRAP  valign="top"> {% if wsd.rightTL %} {{wsd.rightTL}} {% endif %} </td>
+        <td NOWRAP  valign="top"> {% if wsd.rightCap %} {{wsd.rightCap}} {% endif %} </td>
+        <td NOWRAP  valign="top"> {% if wsd.rightSleeve %} {{wsd.rightSleeve}} {% endif %} </td>
+        <td NOWRAP  valign="top"> {% if wsd.remark %} {{wsd.remark}} {% endif %} </td>
+        <td NOWRAP  valign="top"> {% if wsd.partType %} {{wsd.partType}} {% endif %} </td>
+    </tr>            
+{% endfor %}
+{% endfor %}
+    <tr class="Arial10Bold">
+        <td colspan="2" valign="top">TOTAL</td>        
+        <td valign="top" align="right">TQTY</td>        
+        <td colspan="12" valign="top">&nbsp;</td>        
+    </tr>
+<!-- Loop End -- >  
+         
+<!-- Loop End -->
+               
+</table>
+
+</body> 
+</html>

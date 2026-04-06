@@ -1,0 +1,17 @@
+asgiref==3.7.2
+certifi==2024.2.2
+cffi==1.16.0
+charset-normalizer==3.3.2
+colorama==0.4.6 
+cryptography==42.0.5
+
+
+
+ 
+pyodbc==5.1.0
+ 
+ 
+setuptools==75.1.0
+
+
+wfastcgi==3.0.0

@@ -1,0 +1,162 @@
+import 'dart:convert';
+
+import 'package:fintech_new_web/features/auth/screen/update_password.dart';
+import 'package:fintech_new_web/features/network/service/network_service.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import '../../common/widgets/pop_ups.dart';
+import '../provider/auth_provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+class ForgetPassword extends StatefulWidget {
+  static String routeName = 'forgetPassword';
+  const ForgetPassword({super.key});
+
+  @override
+  State<ForgetPassword> createState() => _ForgetPasswordState();
+}
+
+class _ForgetPasswordState extends State<ForgetPassword> {
+  bool loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    AuthProvider provider = Provider.of<AuthProvider>(context, listen: false);
+    provider.emailController.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Consumer<AuthProvider>(builder: (context, provider, child) {
+      return Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Password Reset',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  width: 500,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(6),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Forgot Password',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueAccent,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Please confirm your email address via which your account is registered.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        controller: provider.emailController,
+                        decoration: const InputDecoration(
+                          hintText: 'Your Email address',
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            setState(() {
+                              loading = true;
+                            });
+                            var headers = {'Content-Type': 'application/json'};
+                            var request = http.Request(
+                                'POST',
+                                Uri.parse(
+                                    "${NetworkService.baseUrl}/user/verification/"));
+                            request.body =
+                                jsonEncode({"email": provider.emailController.text});
+                            request.headers.addAll(headers);
+                            http.StreamedResponse result = await request.send();
+
+                            var message =
+                                jsonDecode(await result.stream.bytesToString());
+                            if (result.statusCode == 201) {
+                              await showAlertDialog(
+                                  context,
+                                  "Please find the verification code in your email inbox.",
+                                  "Continue",
+                                  false);
+                              context.pushNamed(UpdatePassword.routeName,
+                                  queryParameters: {
+                                    "email": provider.emailController.text
+                                  });
+                            } else if (result.statusCode == 400) {
+                              await showAlertDialog(
+                                  context,
+                                  message['message'].toString(),
+                                  "Continue",
+                                  false);
+                            } else if (result.statusCode == 500) {
+                              await showAlertDialog(context, message['message'],
+                                  "Continue", false);
+                            } else {
+                              await showAlertDialog(context, message['message'],
+                                  "Continue", false);
+                            }
+                            setState(() {
+                              loading = false;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF007BFF),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                          ),
+                          child: loading
+                              ? const SpinKitFadingCircle(
+                                  color: Colors.white,
+                                  size: 25,
+                                )
+                              : const Text('Send Verification',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
+  }
+}
